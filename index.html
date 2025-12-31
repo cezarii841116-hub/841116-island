@@ -1,49 +1,100 @@
- html>
-<html lang="bg">
+ <html lang="bg">
 <head>
     <meta charset="UTF-8">
-    <title>841116_ISLAND</title>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "PayAction",
-      "recipient": {
-        "@type": "Organization",
-        "name": "KIBER_841116",
-        "identifier": "589JiwmS4f1S3EayhByX9eS27Ew9Fq4p7SEQ9E"
-      },
-      "price": "10.00",
-      "priceCurrency": "EUR"
-    }
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ISLAND - Gallery</title>
     <style>
-        body { background: #000; color: #00ff41; font-family: monospace; text-align: center; padding-top: 50px; }
-        .island { border: 2px solid #ffd700; display: inline-block; padding: 30px; box-shadow: 0 0 20px #ffd700; }
+        body {
+            background-color: #0a0a0a;
+            color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Решетка от квадрати за фон */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 5px;
+            padding: 5px;
+            filter: brightness(0.3); /* Затъмнява изображенията, за да се чете текста */
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .square {
+            aspect-ratio: 1 / 1;
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #222;
+        }
+
+        /* Централният панел с твоя Node статус */
+        .overlay {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-box {
+            border: 3px solid #00f2ff;
+            background: rgba(0, 0, 0, 0.85);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 25px #00f2ff;
+            max-width: 500px;
+        }
+
+        h1 {
+            font-size: 40px;
+            margin: 0;
+            color: #ffd700; /* Златно заглавие */
+        }
+
+        .status {
+            color: #00ff00; /* Зелено за активен статус */
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .names {
+            font-size: 16px;
+            margin-top: 15px;
+            color: #ffffff;
+            letter-spacing: 3px;
+            border-top: 1px solid #333;
+            padding-top: 10px;
+        }
     </style>
 </head>
 <body>
-    <div class="island">
-        <h1>島 THE ISLAND</h1>
-        <p>NODE: 841116 | ACTIVE</p>
-        <p style="font-size: 10px;">ADDR: 589JiwmS4f1S3EayhByX9eS27Ew9Fq4p7SEQ9E</p>
+
+    <div class="grid-container">
+        <div class="square" style="background-image: url('https://via.placeholder.com/300/111')"></div>
+        <div class="square" style="background-image: url('https://via.placeholder.com/300/222')"></div>
+        <div class="square" style="background-image: url('https://via.placeholder.com/300/333')"></div>
+        <div class="square" style="background-image: url('https://via.placeholder.com/300/444')"></div>
+        <div class="square" style="background-image: url('https://via.placeholder.com/300/555')"></div>
+        <div class="square" style="background-image: url('https://via.placeholder.com/300/666')"></div>
     </div>
+
+    <div class="overlay">
+        <div class="main-box">
+            <h1>島 THE ISLAND</h1>
+            <div class="status">NODE: 841116 | ACTIVE</div>
+            <div class="names">LEONARDO DA VINCI | REMBRANDT</div>
+            <p style="font-size: 12px; margin-top: 15px; opacity: 0.6;">Verified via Solana Blockchain</p>
+        </div>
+    </div>
+
 </body>
-</html><script>
-        const myWallet = "589JiwmS4f1S3EayhByX9eS27Ew9Fq4p7SEQ9E";
-        async function checkPayment() {
-            try {
-                const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'));
-                const pubKey = new solanaWeb3.PublicKey(myWallet);
-                const transactions = await connection.getSignaturesForAddress(pubKey, {limit: 5});
-                if (transactions.length > 0) {
-                    alert("Плащането е потвърдено!");
-                    document.getElementById('locked-data').style.display = 'block';
-                } else {
-                    alert("Няма нови трансакции.");
-                }
-            } catch (err) {
-                alert("Грешка при връзка с мрежата.");
-            }
-        }
-        document.getElementById('verify-payment').onclick = checkPayment;
-</script>
+ </html>
