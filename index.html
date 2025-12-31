@@ -28,4 +28,22 @@
         <p style="font-size: 10px;">ADDR: 589JiwmS4f1S3EayhByX9eS27Ew9Fq4p7SEQ9E</p>
     </div>
 </body>
-</html>
+</html><script>
+        const myWallet = "589JiwmS4f1S3EayhByX9eS27Ew9Fq4p7SEQ9E";
+        async function checkPayment() {
+            try {
+                const connection = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'));
+                const pubKey = new solanaWeb3.PublicKey(myWallet);
+                const transactions = await connection.getSignaturesForAddress(pubKey, {limit: 5});
+                if (transactions.length > 0) {
+                    alert("Плащането е потвърдено!");
+                    document.getElementById('locked-data').style.display = 'block';
+                } else {
+                    alert("Няма нови трансакции.");
+                }
+            } catch (err) {
+                alert("Грешка при връзка с мрежата.");
+            }
+        }
+        document.getElementById('verify-payment').onclick = checkPayment;
+</script>
