@@ -3,17 +3,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-        * { margin: 0; padding: 0; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body, html { 
             height: 100%; 
             width: 100%; 
             background: #000; 
             overflow: hidden; 
         }
-        .bg {
+        .bg-container {
             width: 100vw;
             height: 100vh;
-            /* Използваме точното име на файла, който се вижда на скрийншота ти */
+            /* Използваме името на файла, който качи преди малко */
             background-image: url('unnamed (1).jpg');
             background-size: cover;
             background-position: center;
@@ -21,6 +21,6 @@
     </style>
 </head>
 <body>
-    <div class="bg"></div>
+    <div class="bg-container"></div>
 </body>
 </html>
