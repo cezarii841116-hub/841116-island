@@ -2,41 +2,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>THE ISLAND</title>
     <style>
-        /* Пълно изчистване на границите */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+        * { margin: 0; padding: 0; }
         body, html { 
             height: 100%; 
-            width: 100%;
-            background-color: #000; 
+            width: 100%; 
+            background: #000; 
             overflow: hidden; 
         }
-
-        /* Това е слоят, който прави магията */
-        .perfect-view {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .bg {
             width: 100vw;
             height: 100vh;
-            /* Използваме директен и сигурен път към твоето изображение */
-            background-image: url('https://raw.githubusercontent.com/cezarii841116/841116-island/main/17671836053613773270227270430901.jpg');
-            background-size: contain; /* Запазва пропорциите на лицата без изкривяване */
-            background-repeat: no-repeat;
-            background-position: center center;
-        }
-
-        /* Оптимизация за екрана на твоя телефон */
-        @media (max-aspect-ratio: 9/16) {
-            .perfect-view {
-                background-size: cover;
-            }
+            /* Използваме точното име на файла, който се вижда на скрийншота ти */
+            background-image: url('unnamed (1).jpg');
+            background-size: cover;
+            background-position: center;
         }
     </style>
 </head>
 <body>
-    <div class="perfect-view"></div>
+    <div class="bg"></div>
 </body>
 </html>
