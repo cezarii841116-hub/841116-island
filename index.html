@@ -33,21 +33,18 @@
         <button class="upload-trigger" id="upload-button">📸 СПОДЕЛИ ИЗКУСТВО НА ОСТРОВА...</button>
     </div>
 
-    <div id="posts-container">
-        </div>
+    <div id="posts-container"></div>
 </div>
 
 <script>
     const uploadBtn = document.getElementById('upload-button');
     const postsContainer = document.getElementById('posts-container');
 
-    // 1. ЗАРЕЖДАНЕ НА ЗАПАЗЕНИТЕ ПОСТОВЕ ПРИ СТАРТ
     window.onload = () => {
         const savedPosts = JSON.parse(localStorage.getItem('island_posts')) || [];
         savedPosts.forEach(url => renderPost(url));
     };
 
-    // 2. КОНФИГУРАЦИЯ НА CLOUDINARY
     const myWidget = cloudinary.createUploadWidget({
         cloudName: 'dxzdp3e8q', 
         uploadPreset: 'island_preset'
@@ -63,14 +60,12 @@
         myWidget.open();
     }, false);
 
-    // 3. ЗАПАЗВАНЕ В ПАМЕТТА (LocalStorage)
     function savePost(url) {
         const savedPosts = JSON.parse(localStorage.getItem('island_posts')) || [];
         savedPosts.unshift(url);
         localStorage.setItem('island_posts', JSON.stringify(savedPosts));
     }
 
-    // 4. ПОКАЗВАНЕ НА ПОСТА
     function renderPost(imageUrl) {
         const postHtml = `
             <div class="post">
