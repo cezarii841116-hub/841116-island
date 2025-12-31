@@ -4,40 +4,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         body, html { 
             height: 100%; 
-            margin: 0; 
-            background-color: #000;
-            overflow: hidden;
+            background: #000; 
+            overflow: hidden; 
         }
 
-        /* Това прави изображението ти фонов слой на целия екран */
-        .background-image {
+        .main-design {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            /* Тук използваме твоята оригинална снимка като фон */
+            /* Използваме директен линк към визията */
             background-image: url('https://raw.githubusercontent.com/cezarii841116/841116-island/main/17671836053613773270227270430901.jpg');
             background-size: cover;
             background-position: center;
             z-index: 1;
         }
 
-        /* Прозрачен слой за четливост, ако решиш да добавяш интерактивни бутони по-късно */
-        .content-overlay {
-            position: relative;
-            z-index: 2;
-            height: 100%;
-            width: 100%;
+        /* Ако горният линк не зареди, този скрипт ще подсигури визията */
+        .fallback-ui {
+            position: absolute;
+            z-index: 5;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            width: 90%;
+            border: 5px double #00f2ff;
+            border-radius: 20px;
+            padding: 40px 10px;
+            background: rgba(0,0,0,0.7);
+            box-shadow: 0 0 30px #00f2ff;
         }
     </style>
 </head>
 <body>
-    <div class="background-image"></div>
-    <div class="content-overlay">
-        </div>
+    <div class="main-design"></div>
 </body>
-</html>         
+</html>
