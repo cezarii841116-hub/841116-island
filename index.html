@@ -1,96 +1,43 @@
-         <html>
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body, html { height: 100%; background: #000; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        
+        body, html { 
+            height: 100%; 
+            margin: 0; 
+            background-color: #000;
+            overflow: hidden;
+        }
 
-        /* Решетка 3x3 с твоите изображения */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            height: 100vh;
-            width: 100vw;
-            position: absolute;
+        /* Това прави изображението ти фонов слой на целия екран */
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* Тук използваме твоята оригинална снимка като фон */
+            background-image: url('https://raw.githubusercontent.com/cezarii841116/841116-island/main/17671836053613773270227270430901.jpg');
+            background-size: cover;
+            background-position: center;
             z-index: 1;
         }
 
-        .grid div {
-            background-size: cover;
-            background-position: center;
-            border: 0.5px solid rgba(255,255,255,0.05);
-        }
-
-        /* Централният светещ панел - ТОЧНО КАТО НА СНИМКАТА */
-        .center-panel {
-            position: absolute;
-            z-index: 10;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 85%;
-            max-width: 500px;
-            background: rgba(0, 0, 0, 0.75);
-            border: 5px solid #00f2ff; /* Светещо синьо */
-            border-radius: 20px;
-            padding: 40px 20px;
-            text-align: center;
-            box-shadow: 0 0 40px #00f2ff, inset 0 0 20px #00f2ff;
-        }
-
-        h1 {
-            color: #ffd700; /* Златно заглавие */
-            font-size: 45px;
-            margin: 0;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
-        }
-
-        .status {
-            color: #39ff14; /* Неоново зелено */
-            font-size: 26px;
-            font-weight: bold;
-            margin: 15px 0;
-            text-transform: uppercase;
-        }
-
-        .info {
-            color: #ffd700;
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-
-        .artists {
-            color: #fff;
-            font-size: 14px;
-            opacity: 0.8;
-            letter-spacing: 3px;
-            margin-top: 20px;
+        /* Прозрачен слой за четливост, ако решиш да добавяш интерактивни бутони по-късно */
+        .content-overlay {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            width: 100%;
         }
     </style>
 </head>
 <body>
-    <div class="grid">
-        <div style="background-image: url('https://picsum.photos/400/400?random=11')"></div>
-        <div style="background-image: url('https://picsum.photos/400/400?random=12')"></div>
-        <div style="background-image: url('https://picsum.photos/400/400?random=13')"></div>
-        <div style="background-image: url('https://picsum.photos/400/400?random=14')"></div>
-        <div style="background-image: url('https://picsum.photos/400/400?random=15')"></div>
-        <div style="background-image: url('https://picsum.photos/400/400?random=16')"></div>
-        <div style="background-image: url('https://picsum.photos/400/400?random=17')"></div>
-        <div style="background-image: url('https://picsum.photos/400/400?random=18')"></div>
-        <div style="background-image: url('https://picsum.photos/400/400?random=19')"></div>
-    </div>
-
-    <div class="center-panel">
-        <h1>島 THE ISLAND</h1>
-        <div class="status">NODE: 841116 | ACTIVE</div>
-        <div class="info">Blockchain Verified Access</div>
-        <div class="artists">LEONARDO DA VINCI | REMBRANDT</div>
-    </div>
+    <div class="background-image"></div>
+    <div class="content-overlay">
+        </div>
 </body>
-         </html>
-
-        
+</html>         
