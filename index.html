@@ -1,4 +1,4 @@
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bg">
 <head>
     <meta charset="UTF-8">
@@ -8,6 +8,7 @@
         body { background: #0a0a0a; color: #00ff41; font-family: monospace; margin: 0; padding: 20px; }
         .header-container { border-bottom: 2px solid #00ff41; padding-bottom: 20px; margin-bottom: 30px; }
         .feed { max-width: 600px; margin: 0 auto; }
+        .cover-img { width: 100%; border: 1px solid #00ff41; margin-bottom: 20px; border-radius: 4px; }
         .create-post { background: #1a1a1a; padding: 20px; border: 1px solid #00ff41; margin-bottom: 20px; text-align: center; }
         .upload-trigger { 
             background: #00ff41; color: #000; border: none; padding: 12px 24px; 
@@ -26,6 +27,8 @@
 </div>
 
 <div class="feed">
+    <img src="https://via.placeholder.com/600x300/1a1a1a/00ff41?text=THE+ISLAND+COVER" id="main-cover" class="cover-img">
+
     <div class="create-post">
         <button class="upload-trigger" id="upload-button">📸 СПОДЕЛИ ИЗКУСТВО НА ОСТРОВА...</button>
     </div>
@@ -38,14 +41,21 @@
     const uploadBtn = document.getElementById('upload-button');
     const postsContainer = document.getElementById('posts-container');
 
-    // ТВОЯТА ЛИЧНА КОНФИГУРАЦИЯ
+    // 1. ЗАРЕЖДАНЕ НА ЗАПАЗЕНИТЕ ПОСТОВЕ ПРИ СТАРТ
+    window.onload = () => {
+        const savedPosts = JSON.parse(localStorage.getItem('island_posts')) || [];
+        savedPosts.forEach(url => renderPost(url));
+    };
+
+    // 2. КОНФИГУРАЦИЯ НА CLOUDINARY
     const myWidget = cloudinary.createUploadWidget({
         cloudName: 'dxzdp3e8q', 
         uploadPreset: 'island_preset'
     }, (error, result) => {
         if (!error && result && result.event === "success") { 
-            console.log('Done! Here is the image info: ', result.info); 
-            addNewPost(result.info.secure_url);
+            const imageUrl = result.info.secure_url;
+            savePost(imageUrl);
+            renderPost(imageUrl);
         }
     });
 
@@ -53,7 +63,15 @@
         myWidget.open();
     }, false);
 
-    function addNewPost(imageUrl) {
+    // 3. ФУНКЦИЯ ЗА ЗАПАЗВАНЕ В ПАМЕТТА (LocalStorage)
+    function savePost(url) {
+        const savedPosts = JSON.parse(localStorage.getItem('island_posts')) || [];
+        savedPosts.unshift(url); // Добавя най-отгоре
+        localStorage.setItem('island_posts', JSON.stringify(savedPosts));
+    }
+
+    // 4. ФУНКЦИЯ ЗА ПОКАЗВАНЕ НА ПОСТА
+    function renderPost(imageUrl) {
         const postHtml = `
             <div class="post">
                 <div class="post-header">SYSTEM_ADMIN > UPLOAD_SUCCESS > ${new Date().toLocaleTimeString()}</div>
@@ -66,3 +84,4 @@
 
 </body>
 </html>
+
