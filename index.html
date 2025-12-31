@@ -8,7 +8,7 @@
         body { background: #0a0a0a; color: #00ff41; font-family: monospace; margin: 0; padding: 20px; }
         .header-container { border-bottom: 2px solid #00ff41; padding-bottom: 20px; margin-bottom: 30px; }
         .feed { max-width: 600px; margin: 0 auto; }
-        .cover-img { width: 100%; border: 1px solid #00ff41; margin-bottom: 20px; border-radius: 4px; }
+        .cover-img { width: 100%; border: 1px solid #00ff41; margin-bottom: 20px; border-radius: 4px; display: block; }
         .create-post { background: #1a1a1a; padding: 20px; border: 1px solid #00ff41; margin-bottom: 20px; text-align: center; }
         .upload-trigger { 
             background: #00ff41; color: #000; border: none; padding: 12px 24px; 
@@ -27,7 +27,7 @@
 </div>
 
 <div class="feed">
-    <img src="https://via.placeholder.com/600x300/1a1a1a/00ff41?text=THE+ISLAND+COVER" id="main-cover" class="cover-img">
+    <img src="https://res.cloudinary.com/dxzdp3e8q/image/upload/v1735654157/mptf0un09u9uym2yveof.jpg" id="main-cover" class="cover-img">
 
     <div class="create-post">
         <button class="upload-trigger" id="upload-button">📸 СПОДЕЛИ ИЗКУСТВО НА ОСТРОВА...</button>
@@ -63,14 +63,14 @@
         myWidget.open();
     }, false);
 
-    // 3. ФУНКЦИЯ ЗА ЗАПАЗВАНЕ В ПАМЕТТА (LocalStorage)
+    // 3. ЗАПАЗВАНЕ В ПАМЕТТА (LocalStorage)
     function savePost(url) {
         const savedPosts = JSON.parse(localStorage.getItem('island_posts')) || [];
-        savedPosts.unshift(url); // Добавя най-отгоре
+        savedPosts.unshift(url);
         localStorage.setItem('island_posts', JSON.stringify(savedPosts));
     }
 
-    // 4. ФУНКЦИЯ ЗА ПОКАЗВАНЕ НА ПОСТА
+    // 4. ПОКАЗВАНЕ НА ПОСТА
     function renderPost(imageUrl) {
         const postHtml = `
             <div class="post">
@@ -84,4 +84,3 @@
 
 </body>
 </html>
-
