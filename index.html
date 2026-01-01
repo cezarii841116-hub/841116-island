@@ -1,31 +1,55 @@
-<!DOCTYPE            uploadPreset: 'island_preset'
-        }, (error, result) => {
-            if (!error && result && result.event === "success") { 
-                const imageUrl = result.info.secure_url;
-                savePost(imageUrl);
-                renderPost(imageUrl);
-            }
-        });
+import numpy as np
+import matplotlib.pyplot as plt
 
-        uploadBtn.addEventListener('click', () => { myWidget.open(); }, false);
+def generate_banknote_security_layer():
+    # Създаване на платно с висока разделителна способност
+    fig, ax = plt.subplots(figsize=(10, 7), dpi=150)
+    ax.set_facecolor('white')
 
-        function savePost(url) {
-            const savedPosts = JSON.parse(localStorage.getItem('island_posts')) || [];
-            savedPosts.unshift(url);
-            localStorage.setItem('island_posts', JSON.stringify(savedPosts));
-        }
+    # 1. ГЕНЕРИРАНЕ НА GUILLOCHE (ФОНОВА ЗАЩИТА)
+    # Използваме хипотрохоида за сложни пресичащи се линии
+    R, r, d = 12, 0.4, 7
+    theta = np.linspace(0, 2 * np.pi * 80, 15000)
+    x_gui = (R - r) * np.cos(theta) + d * np.cos(((R - r) / r) * theta)
+    y_gui = (R - r) * np.sin(theta) - d * np.sin(((R - r) / r) * theta)
+    
+    ax.plot(x_gui, y_gui, color='#1e3d59', linewidth=0.15, alpha=0.4)
 
-        function renderPost(imageUrl) {
-            const postHtml = `
-                <div class="post">
-                    <div class="post-header">
-                        <div class="user-avatar"></div>
-                        <div class="user-info">Node Admin</div>
-                    </div>
-                    <img src="${imageUrl}" class="post-image">
-                </div>`;
-            postsContainer.insertAdjacentHTML('afterbegin', postHtml);
-        }
-    </script>
-</body>
-</html>
+    # 2. МИКРОТЕКСТ (Microprinting)
+    # Генерираме редове от изключително малък текст като фонов елемент
+    micro_text = "EURO " * 100
+    for i in range(-15, 15, 2):
+        ax.text(-18, i, micro_text, fontsize=1.5, color='#ff6e40', 
+                alpha=0.3, clip_on=True, weight='bold')
+
+    # 3. МОДУЛИРАН СКРИТ ОБРАЗ (Latent Image Simulation)
+    # Изграждаме решетка, която се променя в централната зона
+    y_lines = np.linspace(-15, 15, 100)
+    for y in y_lines:
+        x_points = np.linspace(-15, 15, 500)
+        
+        # Дефинираме маска за "скрит" символ (в случая кръг с радиус 5)
+        # Може да се замени с маска на числото "50" или знак "€"
+        mask = np.sqrt(x_points**2 + y**2) < 5
+        
+        # Рисуваме линиите: нормални извън маската, модифицирани вътре
+        # Външна част: непрекъсната линия
+        ax.plot(x_points[~mask], [y]*len(x_points[~mask]), color='#004d40', linewidth=0.3)
+        
+        # Вътрешна част (Латентен образ): превръщаме линията в точки/релеф
+        if np.any(mask):
+            ax.scatter(x_points[mask], [y]*len(x_points[mask]), 
+                       color='#004d40', s=0.2, marker='o')
+
+    # Финални настройки
+    ax.set_xlim(-16, 16)
+    ax.set_ylim(-16, 16)
+    ax.axis('off')
+    plt.title("Security Design Prototype - Python Generated", fontsize=8, color='gray')
+    
+    return plt
+
+# Стартиране и показване
+print("Генериране на защитния слой... Моля, изчакайте.")
+security_design = generate_banknote_security_layer()
+security_design.show()
