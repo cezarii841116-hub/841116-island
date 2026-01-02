@@ -8,21 +8,24 @@
     <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
 
     <style>
-        /* Скелетът и Корицата - Фиксирани */
-        body, html { 
-            margin: 0; padding: 0; width: 100%; height: 100%; 
-            background-color: #000;
-            /* Използваме твоята снимка директно за фон на тялото */
+        /* Гарантирано зареждане на фона */
+        html {
+            background: #000;
+        }
+        
+        body { 
+            margin: 0; padding: 0; width: 100%; height: 100vh; 
+            /* Слагаме твоята снимка като основен фон */
             background-image: url('https://41116-hub.github.io/Screenshot_20260101_142240_Chrome.jpg');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed;
+            background-repeat: no-repeat;
             font-family: 'Courier New', monospace; 
             color: #fff;
             overflow: hidden;
         }
 
-        /* Твоят оригинален скелет с прозрачност за снимката */
+        /* Твоят оригинален скелет с прозрачен слой за четливост */
         .overlay { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0, 0, 0, 0.4); 
@@ -32,22 +35,33 @@
 
         .node-info { 
             color: #00ff00; font-weight: bold; border-left: 3px solid #00ff00; 
-            padding-left: 10px; font-size: 20px; text-shadow: 0 0 10px #00ff00;
+            padding-left: 10px; font-size: 1.2rem; text-shadow: 0 0 10px #00ff00;
         }
 
-        .footer-ui { width: 100%; max-width: 500px; margin: 0 auto 50px auto; text-align: center; }
+        .footer-ui { width: 100%; max-width: 450px; margin: 0 auto 40px auto; text-align: center; }
         
+        /* Бутоните, които се вписват в дизайна */
         .btn-ui { 
             background: #ab9ff2; color: #fff; border: none;
-            padding: 20px; width: 100%; cursor: pointer; text-transform: uppercase; 
-            border-radius: 12px; font-weight: bold; font-size: 16px;
-            box-shadow: 0 0 20px rgba(171, 159, 242, 0.5);
+            padding: 18px; width: 100%; cursor: pointer; text-transform: uppercase; 
+            border-radius: 10px; font-weight: bold; font-size: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
             margin-bottom: 10px;
         }
 
-        #upload-btn { background: rgba(0, 255, 0, 0.1); border: 1px solid #00ff00; color: #00ff00; display: none; }
+        #upload-btn { 
+            background: rgba(0, 255, 0, 0.15); 
+            border: 1px solid #00ff00; 
+            color: #00ff00; 
+            display: none; 
+        }
 
-        #postsContainer { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; overflow-y: auto; max-height: 40vh; }
+        #postsContainer { 
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; 
+            margin-top: 20px; overflow-y: auto; max-height: 50vh; 
+        }
+        
+        .post-card { border: 1px solid #00ff00; padding: 5px; background: rgba(0,0,0,0.8); }
     </style>
 </head>
 <body>
@@ -55,15 +69,15 @@
     <div class="overlay">
         <div class="header">
             <div class="node-info">NODE: 841116 | <span id="status-text">OFFLINE</span></div>
-            <div style="font-size: 12px; color: #00ff00; margin-left: 13px; margin-top: 5px; font-weight: bold;">BLOCKCHAIN VERIFIED ACCESS // FEE: 10 EUR</div>
+            <div style="font-size: 10px; color: #00ff00; margin-left: 13px; margin-top: 5px;">VERIFIED ACCESS // FEE: 10 EUR</div>
         </div>
 
         <div id="postsContainer"></div>
 
         <div class="footer-ui">
             <button id="wallet-btn" class="btn-ui">Connect Phantom Wallet</button>
-            <button id="upload-btn" class="btn-ui">Pay 10 EUR & Share Art</button>
-            <div style="font-size: 10px; color: #00ff00; margin-top: 15px; opacity: 0.8; letter-spacing: 1px;">AI MONITORING ACTIVE // SECURE NODE</div>
+            <button id="upload-btn" class="btn-ui">Pay 10 EUR & Upload Art</button>
+            <div style="font-size: 9px; color: #00ff00; margin-top: 10px; opacity: 0.7; letter-spacing: 1px;">AI MONITORING ACTIVE // SECURE NODE</div>
         </div>
     </div>
 
@@ -71,7 +85,7 @@
         const myWallet = '589JiwRf7sknuGUoe1BqzsuxvKALncGZAhw6zN7SEQ9E';
         const solanaConn = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'));
 
-        // Функция за свързване
+        // Връзка с Phantom
         document.getElementById('wallet-btn').onclick = async () => {
             if (window.solana && window.solana.isPhantom) {
                 try {
@@ -79,23 +93,23 @@
                     document.getElementById('status-text').innerText = "ONLINE";
                     document.getElementById('wallet-btn').style.display = 'none';
                     document.getElementById('upload-btn').style.display = 'block';
-                } catch (err) { console.log("Отказано свързване"); }
+                } catch (err) { console.log("User rejected"); }
             } else {
-                window.open("https://phantom.app/", "_blank");
+                alert("Моля, отворете сайта през Phantom Browser или инсталирайте разширението.");
             }
         };
 
-        // Cloudinary
+        // Cloudinary Logic
         const myWidget = cloudinary.createUploadWidget({
             cloudName: 'dxzdp3e8q', uploadPreset: 'island_preset', theme: 'minimal'
         }, (error, result) => {
             if (!error && result.event === "success") {
-                const img = `<div style="border:1px solid #00ff00; background:#000; padding:5px;"><img src="${result.info.secure_url}" style="width:150px;"></div>`;
-                document.getElementById('postsContainer').insertAdjacentHTML('afterbegin', img);
+                const imgHtml = `<div class="post-card"><img src="${result.info.secure_url}" style="width:140px;"></div>`;
+                document.getElementById('postsContainer').insertAdjacentHTML('afterbegin', imgHtml);
             }
         });
 
-        // Плащане
+        // Плащане в SOL
         document.getElementById('upload-btn').onclick = async () => {
             try {
                 const transaction = new solanaWeb3.Transaction().add(
@@ -112,7 +126,7 @@
                 await solanaConn.confirmTransaction(signature);
                 myWidget.open();
             } catch (err) {
-                alert("Транзакцията не премина. Опитайте отново.");
+                alert("Транзакцията не премина. Проверете баланса си.");
             }
         };
     </script>
