@@ -4,59 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THE ISLAND | NODE 841116</title>
-    
     <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
     <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
 
     <style>
-        /* Скелетът и Корицата - Запазени на 100% */
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #000; color: #fff; font-family: 'Courier New', monospace; overflow: hidden; }
-        
-        .background-container { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background-image: url('https://41116-hub.github.io/Screenshot_20260101_142240_Chrome.jpg'); 
-            background-size: cover; background-position: center; z-index: -1; 
+        /* Скелетът и Корицата - Фиксирани */
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%; 
+            background-color: #000;
+            /* Използваме твоята снимка директно за фон на тялото */
+            background-image: url('https://41116-hub.github.io/Screenshot_20260101_142240_Chrome.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            font-family: 'Courier New', monospace; 
+            color: #fff;
+            overflow: hidden;
         }
 
+        /* Твоят оригинален скелет с прозрачност за снимката */
         .overlay { 
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.4); /* Запазваме видимостта на фоновата картинка */
+            background: rgba(0, 0, 0, 0.4); 
             display: flex; flex-direction: column; justify-content: space-between; 
             padding: 20px; box-sizing: border-box; 
         }
 
-        .node-info { color: #00ff00; font-weight: bold; border-left: 2px solid #00ff00; padding-left: 10px; text-transform: uppercase; }
-
-        /* Бутоните са интегрирани в твоя UI дизайн */
-        .footer-ui { width: 100%; max-width: 500px; margin: 0 auto 40px auto; text-align: center; }
-        
-        .btn-ui { 
-            background: rgba(20, 20, 20, 0.9); border: 1px solid #00ff00; color: #00ff00; 
-            padding: 18px; width: 100%; cursor: pointer; text-transform: uppercase; 
-            border-radius: 8px; font-family: inherit; font-weight: bold; 
+        .node-info { 
+            color: #00ff00; font-weight: bold; border-left: 3px solid #00ff00; 
+            padding-left: 10px; font-size: 20px; text-shadow: 0 0 10px #00ff00;
         }
 
-        #wallet-btn { background: #ab9ff2; color: #fff; border: none; margin-bottom: 10px; }
+        .footer-ui { width: 100%; max-width: 500px; margin: 0 auto 50px auto; text-align: center; }
+        
+        .btn-ui { 
+            background: #ab9ff2; color: #fff; border: none;
+            padding: 20px; width: 100%; cursor: pointer; text-transform: uppercase; 
+            border-radius: 12px; font-weight: bold; font-size: 16px;
+            box-shadow: 0 0 20px rgba(171, 159, 242, 0.5);
+            margin-bottom: 10px;
+        }
 
-        #postsContainer { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; }
+        #upload-btn { background: rgba(0, 255, 0, 0.1); border: 1px solid #00ff00; color: #00ff00; display: none; }
+
+        #postsContainer { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 20px; overflow-y: auto; max-height: 40vh; }
     </style>
 </head>
 <body>
 
-    <div class="background-container"></div>
-
     <div class="overlay">
         <div class="header">
             <div class="node-info">NODE: 841116 | <span id="status-text">OFFLINE</span></div>
-            <div style="font-size: 11px; color: #00ff00; margin-left: 12px; opacity: 0.8;">BLOCKCHAIN VERIFIED ACCESS // FEE: 10 EUR</div>
+            <div style="font-size: 12px; color: #00ff00; margin-left: 13px; margin-top: 5px; font-weight: bold;">BLOCKCHAIN VERIFIED ACCESS // FEE: 10 EUR</div>
         </div>
 
         <div id="postsContainer"></div>
 
         <div class="footer-ui">
             <button id="wallet-btn" class="btn-ui">Connect Phantom Wallet</button>
-            <button id="upload-btn" class="btn-ui" style="display:none;">Pay 10 EUR & Share Art</button>
-            <div style="font-size: 10px; color: #00ff00; margin-top: 10px; opacity: 0.6;">AI MONITORING ACTIVE // SECURE NODE</div>
+            <button id="upload-btn" class="btn-ui">Pay 10 EUR & Share Art</button>
+            <div style="font-size: 10px; color: #00ff00; margin-top: 15px; opacity: 0.8; letter-spacing: 1px;">AI MONITORING ACTIVE // SECURE NODE</div>
         </div>
     </div>
 
@@ -64,13 +71,17 @@
         const myWallet = '589JiwRf7sknuGUoe1BqzsuxvKALncGZAhw6zN7SEQ9E';
         const solanaConn = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'));
 
-        // Връзка с Phantom
+        // Функция за свързване
         document.getElementById('wallet-btn').onclick = async () => {
             if (window.solana && window.solana.isPhantom) {
-                const resp = await window.solana.connect();
-                document.getElementById('status-text').innerText = "ONLINE";
-                document.getElementById('wallet-btn').style.display = 'none';
-                document.getElementById('upload-btn').style.display = 'block';
+                try {
+                    await window.solana.connect();
+                    document.getElementById('status-text').innerText = "ONLINE";
+                    document.getElementById('wallet-btn').style.display = 'none';
+                    document.getElementById('upload-btn').style.display = 'block';
+                } catch (err) { console.log("Отказано свързване"); }
+            } else {
+                window.open("https://phantom.app/", "_blank");
             }
         };
 
@@ -79,8 +90,8 @@
             cloudName: 'dxzdp3e8q', uploadPreset: 'island_preset', theme: 'minimal'
         }, (error, result) => {
             if (!error && result.event === "success") {
-                const html = `<div style="border:1px solid #333; padding:5px; background:#000;"><img src="${result.info.secure_url}" style="width:150px;"></div>`;
-                document.getElementById('postsContainer').insertAdjacentHTML('afterbegin', html);
+                const img = `<div style="border:1px solid #00ff00; background:#000; padding:5px;"><img src="${result.info.secure_url}" style="width:150px;"></div>`;
+                document.getElementById('postsContainer').insertAdjacentHTML('afterbegin', img);
             }
         });
 
@@ -100,8 +111,10 @@
                 const { signature } = await window.solana.signAndSendTransaction(transaction);
                 await solanaConn.confirmTransaction(signature);
                 myWidget.open();
-            } catch (err) { alert("Транзакцията не е завършена."); }
+            } catch (err) {
+                alert("Транзакцията не премина. Опитайте отново.");
+            }
         };
     </script>
 </body>
-</html>        
+</html>
