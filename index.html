@@ -8,60 +8,54 @@
     <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
 
     <style>
-        /* Гарантирано зареждане на фона */
-        html {
-            background: #000;
-        }
-        
-        body { 
-            margin: 0; padding: 0; width: 100%; height: 100vh; 
-            /* Слагаме твоята снимка като основен фон */
-            background-image: url('https://41116-hub.github.io/Screenshot_20260101_142240_Chrome.jpg');
+        /* Гарантиран фон: скелетът и корицата са едно цяло */
+        html, body {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: #000;
+            background-image: url('./Screenshot_20260101_142240_Chrome.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            font-family: 'Courier New', monospace; 
+            background-attachment: fixed;
+            font-family: 'Courier New', monospace;
             color: #fff;
             overflow: hidden;
         }
 
-        /* Твоят оригинален скелет с прозрачен слой за четливост */
-        .overlay { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.4); 
-            display: flex; flex-direction: column; justify-content: space-between; 
-            padding: 20px; box-sizing: border-box; 
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.45); 
+            display: flex; flex-direction: column; justify-content: space-between;
+            padding: 25px; box-sizing: border-box;
         }
 
-        .node-info { 
-            color: #00ff00; font-weight: bold; border-left: 3px solid #00ff00; 
-            padding-left: 10px; font-size: 1.2rem; text-shadow: 0 0 10px #00ff00;
+        .node-info {
+            color: #00ff00; font-weight: bold; border-left: 4px solid #00ff00;
+            padding-left: 12px; font-size: 1.3rem; text-shadow: 0 0 12px #00ff00;
+            letter-spacing: 1px;
         }
 
-        .footer-ui { width: 100%; max-width: 450px; margin: 0 auto 40px auto; text-align: center; }
-        
-        /* Бутоните, които се вписват в дизайна */
-        .btn-ui { 
+        .footer-ui { width: 100%; max-width: 450px; margin: 0 auto 50px auto; text-align: center; }
+
+        .btn-ui {
             background: #ab9ff2; color: #fff; border: none;
-            padding: 18px; width: 100%; cursor: pointer; text-transform: uppercase; 
-            border-radius: 10px; font-weight: bold; font-size: 14px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            margin-bottom: 10px;
+            padding: 22px; width: 100%; cursor: pointer; text-transform: uppercase;
+            border-radius: 12px; font-weight: bold; font-size: 16px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.6);
+            margin-bottom: 12px; transition: 0.3s;
         }
 
-        #upload-btn { 
-            background: rgba(0, 255, 0, 0.15); 
-            border: 1px solid #00ff00; 
-            color: #00ff00; 
-            display: none; 
+        #upload-btn {
+            background: rgba(0, 255, 0, 0.2);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            display: none;
         }
 
-        #postsContainer { 
-            display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; 
-            margin-top: 20px; overflow-y: auto; max-height: 50vh; 
+        #postsContainer {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;
+            margin-top: 25px; overflow-y: auto; max-height: 45vh;
         }
-        
-        .post-card { border: 1px solid #00ff00; padding: 5px; background: rgba(0,0,0,0.8); }
     </style>
 </head>
 <body>
@@ -69,15 +63,15 @@
     <div class="overlay">
         <div class="header">
             <div class="node-info">NODE: 841116 | <span id="status-text">OFFLINE</span></div>
-            <div style="font-size: 10px; color: #00ff00; margin-left: 13px; margin-top: 5px;">VERIFIED ACCESS // FEE: 10 EUR</div>
+            <div style="font-size: 11px; color: #00ff00; margin-left: 15px; margin-top: 8px; font-weight: bold; opacity: 0.9;">ACCESS PROTOCOL: SOLANA // FEE: 10 EUR</div>
         </div>
 
         <div id="postsContainer"></div>
 
         <div class="footer-ui">
             <button id="wallet-btn" class="btn-ui">Connect Phantom Wallet</button>
-            <button id="upload-btn" class="btn-ui">Pay 10 EUR & Upload Art</button>
-            <div style="font-size: 9px; color: #00ff00; margin-top: 10px; opacity: 0.7; letter-spacing: 1px;">AI MONITORING ACTIVE // SECURE NODE</div>
+            <button id="upload-btn" class="btn-ui">Pay 10 EUR & Share Art</button>
+            <div style="font-size: 10px; color: #00ff00; margin-top: 15px; opacity: 0.7; letter-spacing: 2px;">AI MONITORING ACTIVE // NODE 841116</div>
         </div>
     </div>
 
@@ -85,7 +79,6 @@
         const myWallet = '589JiwRf7sknuGUoe1BqzsuxvKALncGZAhw6zN7SEQ9E';
         const solanaConn = new solanaWeb3.Connection(solanaWeb3.clusterApiUrl('mainnet-beta'));
 
-        // Връзка с Phantom
         document.getElementById('wallet-btn').onclick = async () => {
             if (window.solana && window.solana.isPhantom) {
                 try {
@@ -93,23 +86,19 @@
                     document.getElementById('status-text').innerText = "ONLINE";
                     document.getElementById('wallet-btn').style.display = 'none';
                     document.getElementById('upload-btn').style.display = 'block';
-                } catch (err) { console.log("User rejected"); }
-            } else {
-                alert("Моля, отворете сайта през Phantom Browser или инсталирайте разширението.");
-            }
+                } catch (err) { console.log("Rejected"); }
+            } else { alert("Моля, отворете през Phantom портфейл."); }
         };
 
-        // Cloudinary Logic
         const myWidget = cloudinary.createUploadWidget({
             cloudName: 'dxzdp3e8q', uploadPreset: 'island_preset', theme: 'minimal'
         }, (error, result) => {
             if (!error && result.event === "success") {
-                const imgHtml = `<div class="post-card"><img src="${result.info.secure_url}" style="width:140px;"></div>`;
-                document.getElementById('postsContainer').insertAdjacentHTML('afterbegin', imgHtml);
+                const img = `<div style="border:1px solid #00ff00; padding:5px; background:rgba(0,0,0,0.8);"><img src="${result.info.secure_url}" style="width:150px;"></div>`;
+                document.getElementById('postsContainer').insertAdjacentHTML('afterbegin', img);
             }
         });
 
-        // Плащане в SOL
         document.getElementById('upload-btn').onclick = async () => {
             try {
                 const transaction = new solanaWeb3.Transaction().add(
@@ -125,11 +114,9 @@
                 const { signature } = await window.solana.signAndSendTransaction(transaction);
                 await solanaConn.confirmTransaction(signature);
                 myWidget.open();
-            } catch (err) {
-                alert("Транзакцията не премина. Проверете баланса си.");
-            }
+            } catch (err) { alert("Транзакцията не премина."); }
         };
     </script>
 </body>
 </html>
-        
+            
